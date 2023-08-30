@@ -13,12 +13,15 @@
   </head>
   <body>
     <input type="text" id="urlInput" placeholder="Enter URL" />
+    <input type="file" id="imageInput" />
     <button id="generateButton">Generate QR Code</button>
     <br />
     <div id="qrcode"></div>
 
     <script>
+      // Select the required elements
       const urlInput = document.getElementById("urlInput");
+      // const imageInput = document.getElementById("imageInput");
       const generateButton = document.getElementById("generateButton");
       const qrcodeDiv = document.getElementById("qrcode");
 
@@ -27,14 +30,46 @@
 
       // Function to generate the QR code
       function generateQRCode() {
-        const url = urlInput.value;
+        // Clear any previously added image
+        qrcodeDiv.innerHTML = "";
 
-        // Create a new QRCode instance
-        const qrcode = new QRCode(qrcodeDiv, {
-          text: url,
-          width: 480,
-          height: 480,
-        });
+        const inputVal = urlInput.value ? urlInput.value : imageInput.files[0];
+
+        // Check if input value is valid
+        if (!inputVal) {
+          console.error("Input value is empty.");
+          return;
+        }
+
+        // Set default QR code dimensions
+        const qrCodeWidth = 480;
+        const qrCodeHeight = 480;
+
+        // Initialize QRCode options
+        const qrcodeOptions = {
+          text: inputVal,
+          width: qrCodeWidth,
+          height: qrCodeHeight,
+        };
+
+        // Check if an image file is selected
+        if (imageInput.files.length != 0) {
+          const reader = new FileReader();
+          reader.onload = function (event) {
+            const imageDataUrl = event.target.result;
+
+            // Create a new QRCode instance with updated options
+            const qrcode = new QRCode(qrcodeDiv, qrcodeOptions);
+
+            // Display the image inside the QR code
+            qrcodeDiv.innerHTML = `<img src="${imageDataUrl}" alt="QR Code" width="${qrcodeOptions.width}" height="${qrcodeOptions.height}">`;
+          };
+          reader.readAsDataURL(inputVal);
+        } else {
+          console.log(urlInput.value);
+          // Create a new QRCode instance for text
+          const qrcode = new QRCode(qrcodeDiv, qrcodeOptions);
+        }
       }
     </script>
   </body>
