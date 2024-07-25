@@ -4,12 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>QR Code Generator</title>
-    <script
+    <!-- <script
       src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
       integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
-    ></script>
+    ></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-svg/dist/qrcode.min.js"></script>
   </head>
   <body>
     <input type="text" id="urlInput" placeholder="Enter URL" />
@@ -52,6 +53,8 @@
           height: qrCodeHeight,
         };
 
+        const qrcode = new QRCode(qrcodeDiv, qrcodeOptions);
+
         // Check if an image file is selected
         if (imageInput.files.length != 0) {
           const reader = new FileReader();
@@ -59,16 +62,17 @@
             const imageDataUrl = event.target.result;
 
             // Create a new QRCode instance with updated options
-            const qrcode = new QRCode(qrcodeDiv, qrcodeOptions);
+            // const qrcode = new QRCode(qrcodeDiv, qrcodeOptions);
 
             // Display the image inside the QR code
-            qrcodeDiv.innerHTML = `<img src="${imageDataUrl}" alt="QR Code" width="${qrcodeOptions.width}" height="${qrcodeOptions.height}">`;
+            // qrcodeDiv.innerHTML = `<img src="${imageDataUrl}" alt="QR Code" width="${qrcodeOptions.width}" height="${qrcodeOptions.height}">`;
           };
           reader.readAsDataURL(inputVal);
         } else {
           console.log(urlInput.value);
+
           // Create a new QRCode instance for text
-          const qrcode = new QRCode(qrcodeDiv, qrcodeOptions);
+          // const qrcode = new QRCode(qrcodeDiv, qrcodeOptions);
         }
       }
     </script>
